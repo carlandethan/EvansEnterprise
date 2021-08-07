@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EvansEnterprise.Data;
 using EvansEnterprise.Model;
+using Microsoft.AspNetCore.Cors;
 
 namespace EvansEnterprise.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyAllowSpecificOrigins")]
     public class ToDoItemController : ControllerBase
     {
         private readonly ToDoItemContext _context;
@@ -23,9 +22,9 @@ namespace EvansEnterprise.Controllers
 
         // GET: api/ToDoItem
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItem()
+        public async Task<ActionResult<ToDoItem[]>> GetToDoItem()
         {
-            return await _context.ToDoItem.ToListAsync();
+            return await _context.ToDoItem.ToArrayAsync();
         }
 
         // GET: api/ToDoItem/5

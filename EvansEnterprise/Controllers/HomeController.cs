@@ -13,6 +13,7 @@ namespace EvansEnterprise.Controllers
         public EmptyResult Index()
         {
             return new EmptyResult();
+            System.Decimal value;
         }
 
         // GET: HomeController/Details/5

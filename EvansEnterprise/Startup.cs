@@ -17,6 +17,7 @@ namespace EvansEnterprise
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_ToDoItemSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +28,19 @@ namespace EvansEnterprise
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+
+                                  });
+            });
+
+
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<ToDoItemContext>(options =>
@@ -49,12 +63,14 @@ namespace EvansEnterprise
 
             app.UseRouting();
 
+            app.UseCors(MyAllowSpecificOrigins);
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("Default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins);
             });
         }
     }
