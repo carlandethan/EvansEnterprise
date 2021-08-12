@@ -12,6 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using EvansEnterprise.Data;
+using Swashbuckle.AspNetCore.Swagger;
+using DocumentFormat.OpenXml.EMMA;
+using Microsoft.OpenApi.Models;
 
 namespace EvansEnterprise
 {
@@ -28,6 +31,11 @@ namespace EvansEnterprise
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Evans Enterprise", Version = "v1" });
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -43,6 +51,8 @@ namespace EvansEnterprise
 
             services.AddControllers().AddNewtonsoftJson();
 
+
+
             services.AddDbContext<ToDoItemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ToDoItemContext")));
 
@@ -57,6 +67,9 @@ namespace EvansEnterprise
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Evans Enterprise v1"));
             }
 
             app.UseHttpsRedirection();
