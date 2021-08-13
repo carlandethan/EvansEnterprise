@@ -10,7 +10,7 @@ namespace EvansEnterprise.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("MyAllowSpecificOrigins")]
+    [EnableCors("ToDoPolicy")]
     public class ToDoItemController : ControllerBase
     {
         private readonly ToDoItemContext _context;

@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using EvansEnterprise.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace EvansEnterprise.Data
 {
-    public class ToDoItemContext : DbContext
+    public class ToDoItemContext : IdentityDbContext
     {
         public ToDoItemContext (DbContextOptions<ToDoItemContext> options)
             : base(options)
         {
         }
 
-        public DbSet<EvansEnterprise.Model.ToDoItem> ToDoItem { get; set; }
+        public DbSet<Model.ToDoItem> ToDoItem { get; set; }
     }
 }

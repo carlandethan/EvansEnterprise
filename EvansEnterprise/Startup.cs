@@ -1,26 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using EvansEnterprise.Data;
-using Swashbuckle.AspNetCore.Swagger;
-using DocumentFormat.OpenXml.EMMA;
 using Microsoft.OpenApi.Models;
+
 
 namespace EvansEnterprise
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_ToDoItemSpecificOrigins";
+        readonly string ToDoPolicy = "_ToDoItemSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,13 +24,15 @@ namespace EvansEnterprise
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Evans Enterprise", Version = "v1" });
             });
+
             services.AddCors(options =>
             {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
+                options.AddPolicy(name: ToDoPolicy,
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:4200")
@@ -48,16 +42,11 @@ namespace EvansEnterprise
                                   });
             });
 
-
             services.AddControllers().AddNewtonsoftJson();
-
 
 
             services.AddDbContext<ToDoItemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ToDoItemContext")));
-
-     
-
 
         }
 
@@ -76,14 +65,14 @@ namespace EvansEnterprise
 
             app.UseRouting();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(ToDoPolicy);
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("Default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins);
+                endpoints.MapControllers().RequireCors(ToDoPolicy);
             });
         }
     }
