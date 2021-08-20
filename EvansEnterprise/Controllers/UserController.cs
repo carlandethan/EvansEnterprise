@@ -1,4 +1,5 @@
-﻿using EvansEnterprise.Services;
+﻿using EvansEnterprise.Model;
+using EvansEnterprise.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,13 @@ namespace EvansEnterprise.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult> RegisterAsync(RegisterUser model)
+        {
+            var result = await _userService.RegisterAsync(model);
+            return Ok(result);
         }
     }
 }
