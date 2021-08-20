@@ -24,8 +24,14 @@ namespace EvansEnterprise.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync(RegisterUser model)
         {
-            var result = await _userService.RegisterAsync(model);
-            return Ok(result);
+            if(ModelState.IsValid)
+            {
+
+                var result = await _userService.RegisterAsync(model);
+                return Ok(result);
+            }
+
+            return BadRequest(ModelState.Values);
         }
     }
 }

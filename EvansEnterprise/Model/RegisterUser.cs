@@ -16,7 +16,9 @@ namespace EvansEnterprise.Model
         public string Username { get; set; }
         [Required]
         public string Email { get; set; }
+      
         [Required]
         public string Password { get; set; }
     }
 }
+//^(.{0,7}|[^0-9]*|[^A-Z]*|[a-zA-Z0-9]*)$

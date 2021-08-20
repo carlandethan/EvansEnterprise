@@ -9,5 +9,6 @@ namespace EvansEnterprise.Services
     public interface IUserService
     {
         Task<string> RegisterAsync(RegisterUser register);
+    
     }
 }
