@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using EvansEnterprise.Data;
 using EvansEnterprise.Model;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EvansEnterprise.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("ToDoPolicy")]

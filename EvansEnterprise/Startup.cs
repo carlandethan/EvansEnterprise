@@ -6,7 +6,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using EvansEnterprise.Data;
 using Microsoft.OpenApi.Models;
-
+using EvansEnterprise.Model;
+using Microsoft.AspNetCore.Identity;
+using EvansEnterprise.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace EvansEnterprise
 {
@@ -42,14 +48,45 @@ namespace EvansEnterprise
                                   });
             });
 
-            services.AddControllers().AddNewtonsoftJson();
 
+
+            //Configuration from AppSettings
+            services.Configure<Jwt>(Configuration.GetSection("JWT"));
+            //User Manager Service
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddScoped<IUserService, UserService>();
+
+            //Adding Athentication - JWT
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = false;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
+                };
+            });
+
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<ToDoItemContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ToDoItemContext")));
 
+            services.AddDbContext<ApplicationDbContext>(options =>
+              options.UseSqlServer(Configuration.GetConnectionString("ApplicationDbContext")));
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -67,6 +104,7 @@ namespace EvansEnterprise
 
             app.UseCors(ToDoPolicy);
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
