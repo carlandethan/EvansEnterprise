@@ -20,7 +20,6 @@ namespace EvansEnterprise.Controllers
         {
             _userService = userService;
         }
-
         [HttpPost("register")]
         public async Task<ActionResult> RegisterAsync(RegisterUser model)
         {

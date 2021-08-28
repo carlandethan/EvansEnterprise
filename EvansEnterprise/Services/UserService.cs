@@ -69,11 +69,11 @@ namespace EvansEnterprise.Services
         public async Task<Authentication> GetTokenAsync(TokenRequest model)
         {
             var Authentication = new Authentication();
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.EmailAddress);
             if (user == null)
             {
                 Authentication.IsAuthenticated = false;
-                Authentication.Message = $"No Accounts Registered with {model.Email}.";
+                Authentication.Message = $"No Accounts Registered with {model.EmailAddress}.";
                 return Authentication;
             }
             if (await _userManager.CheckPasswordAsync(user, model.Password))
