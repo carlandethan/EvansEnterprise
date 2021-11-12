@@ -1,3 +1,24 @@
 syntax = "proto3";
 
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/wrappers.proto";
+
 option csharp_namespace = "EvansEnterprise.gRPCService.Protos";
+
+package todoitem;
+
+service ToDoItem{
+   rpc ToDoItem(ToDoRequest) returns (ToDoReply);
+}
+
+
+
+
+message ToDoRequest {
+	string name = 1;
+}
+
+message ToDoReply {
+	string message = 1;
+}
+

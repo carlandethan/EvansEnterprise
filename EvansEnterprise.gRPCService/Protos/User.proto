@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "EvansEnterprise.gRPCService.Protos";
+
+package user;
+
+service User{
+ // rpc LoginUser (LoginRequest) returns (LoginReply);
+  rpc UserProfile (ProfileRequest) returns (ProfileReply);
+  rpc Login (TokenRequest) returns (AuthorizationRespond);
+  }
+
+
+message LoginRequest {
+  string name = 1;
+}
+
+message LoginReply {
+  string message = 1;
+}
+message ProfileRequest {
+  string name = 1;
+}
+
+message ProfileReply {
+  string message = 1;
+}
+
+message TokenRequest{
+        string messageId = 1;
+        string Password = 2;
+        }
+
+message AuthorizationRespond {
+	     string messageId = 1;
+         bool IsAuthenticated = 2;
+         string UserName = 3;
+         string Email = 4;
+         repeated string Roles = 5;
+         string Token = 6;
+}

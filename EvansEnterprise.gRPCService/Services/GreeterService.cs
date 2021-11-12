@@ -1,3 +1,5 @@
+using EvansEnterprise.gRPCService;
+using EvansEnterprise.gRPCService.Protos;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System;

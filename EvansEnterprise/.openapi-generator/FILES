@@ -1,0 +1,7 @@
+.openapi-generator-ignore
+ToDoItemApi.csv
+ToDoItemApi.jmx
+UserApi.csv
+UserApi.jmx
+WeatherForecastApi.csv
+WeatherForecastApi.jmx
